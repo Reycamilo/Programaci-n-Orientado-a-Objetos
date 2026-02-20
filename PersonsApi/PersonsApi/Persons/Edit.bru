@@ -1,0 +1,26 @@
+meta {
+  name: Edit
+  type: http
+  seq: 4
+}
+
+put {
+  url: http://localhost:5228/api/person/0412200400061
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "firstName": "Camilo",
+    "lastName": "Lourdes Esponiaz",
+    "birthDate": "2001-05-23",
+    "gender": "M",
+    "dni": "0412200400061"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

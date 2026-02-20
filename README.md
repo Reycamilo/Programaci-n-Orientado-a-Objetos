@@ -9,4 +9,4 @@
 - Fuertemente tipado.
 - Gestiona la memoria de forma automatica.
 - Ecosistema de librerias que se llama NuGet.
-- Multiplataforma.
+- Multiplataforma.hail hitler
