@@ -1,4 +1,4 @@
 public class PersonActionResponseDto
 {
-    public guid Id { get; set; }
+    public Guid Id { get; set; }
 }
