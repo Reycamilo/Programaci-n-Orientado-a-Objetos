@@ -1,6 +1,6 @@
-public class PersonEditDto : PersonCreateDto
+namespace PersonsApp.Dtos.Persons
 {
-    public PersonEditDto()
+    public class PersonEditDto : PersonCreateDto
     {
         
     }

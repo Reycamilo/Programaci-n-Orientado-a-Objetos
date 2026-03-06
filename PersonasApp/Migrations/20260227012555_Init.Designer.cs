@@ -4,13 +4,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using PersonsApp.Database;
 
 #nullable disable
 
-namespace PersonasApp.Migrations
+namespace PersonsApp.Migrations
 {
     [DbContext(typeof(PersonsDbContext))]
-    [Migration("20260224201128_Init")]
+    [Migration("20260227012555_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -27,7 +28,8 @@ namespace PersonasApp.Migrations
                         .HasColumnName("id");
 
                     b.Property<DateTime>("BirthDate")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasColumnName("birth_date");
 
                     b.Property<string>("CreatedById")
                         .HasColumnType("TEXT")
@@ -39,16 +41,23 @@ namespace PersonasApp.Migrations
 
                     b.Property<string>("DNI")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasColumnName("dni");
 
                     b.Property<string>("FirstName")
-                        .HasColumnType("TEXT");
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("first_name");
 
                     b.Property<string>("Gender")
-                        .HasColumnType("TEXT");
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("gender");
 
                     b.Property<string>("LastName")
-                        .HasColumnType("TEXT");
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("last_name");
 
                     b.Property<string>("UpdateById")
                         .HasColumnType("TEXT")

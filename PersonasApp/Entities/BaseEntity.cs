@@ -1,13 +1,13 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace PersonApp.Entities
+namespace PersonsApp.Entities
 {
     public class BaseEntity
     {
         [Key]
         [Column("id")]
-        public Guid Id { get; set; }
+        public String Id { get; set; }
 
         // Audit fields
         [Column("created_by_id")]

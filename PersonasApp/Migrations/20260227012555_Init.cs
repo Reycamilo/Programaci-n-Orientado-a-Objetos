@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace PersonasApp.Migrations
+namespace PersonsApp.Migrations
 {
     /// <inheritdoc />
     public partial class Init : Migration
@@ -16,11 +16,11 @@ namespace PersonasApp.Migrations
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    DNI = table.Column<string>(type: "TEXT", nullable: false),
-                    FirstName = table.Column<string>(type: "TEXT", nullable: true),
-                    LastName = table.Column<string>(type: "TEXT", nullable: true),
-                    BirthDate = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    Gender = table.Column<string>(type: "TEXT", nullable: true),
+                    dni = table.Column<string>(type: "TEXT", nullable: false),
+                    first_name = table.Column<string>(type: "TEXT", nullable: false),
+                    last_name = table.Column<string>(type: "TEXT", nullable: false),
+                    birth_date = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    gender = table.Column<string>(type: "TEXT", nullable: false),
                     created_by_id = table.Column<string>(type: "TEXT", nullable: true),
                     created_date = table.Column<DateTime>(type: "TEXT", nullable: false),
                     update_by_id = table.Column<string>(type: "TEXT", nullable: true),

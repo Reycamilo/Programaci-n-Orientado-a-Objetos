@@ -1,4 +1,7 @@
-public class PersonActionResponseDto
+namespace PersonsApp.Dtos.Persons
 {
-    public Guid Id { get; set; }
+    public class PersonActionResponseDto
+    {
+        public Guid Id { get; set; }
+    }
 }

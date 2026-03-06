@@ -1,12 +1,15 @@
 using Microsoft.EntityFrameworkCore;
-using PersonApp.Entities;
+using PersonsApp.Entities;
 
-public class PersonsDbContext : DbContext
+namespace PersonsApp.Database
 {
-    public PersonsDbContext(DbContextOptions options) : base(options)
+    public class PersonsDbContext : DbContext
     {
-        
-    }
+        public PersonsDbContext(DbContextOptions options) : base(options)
+        {
+            
+        }
 
-    public DbSet<PersonEntity> Persons { get; set; }
+        public DbSet<PersonEntity> Persons { get; set; }
+    }
 }

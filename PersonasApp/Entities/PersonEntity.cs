@@ -1,29 +1,31 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace PersonApp.Entities
+namespace PersonsApp.Entities
 {
-
-    [Table("persons")] // forzando ha que la tabla se llame persons
+    [Table("persons")]
     public class PersonEntity : BaseEntity
     {
-
-        //  Propiedades
-
-        // [Key] // forzando ha que sea una llave primaria.
-        // [Column("id")]
-        // // public Guid Id { get; set; }
-
-
-        [Required(ErrorMessage = "El DNI es requerido")]
-        public string DNI {get; set;}
-
-
+        [Required()]
+        [StringLength(13)]
+        [Column("dni")]
+        public string DNI { get; set; }
+        
+        [Required()]
+        [StringLength(40)]
+        [Column("first_name")]
         public string FirstName { get; set; }
-
-
+        
+        [Required()]
+        [StringLength(40)]
+        [Column("last_name")]
         public string LastName { get; set; }
+
+        [Column("birth_date")]
         public DateTime BirthDate { get; set; }
-        public string Gender {get; set;}
+
+        [Column("gender")]
+        public string Gender { get; set; }
+
     }
 }
