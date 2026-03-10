@@ -16,5 +16,8 @@ namespace PersonsApp.Services.Persons
 
         Task<ResponseDto<PersonActionResponseDto>> EditAsync(string id, PersonEditDto dot);
 
+        Task<ResponseDto<PersonActionResponseDto>> DeleteAsync(string id);
+
+
     }
 }

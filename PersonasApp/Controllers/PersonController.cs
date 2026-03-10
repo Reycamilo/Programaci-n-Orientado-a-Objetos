@@ -83,20 +83,10 @@ namespace PersonsApp.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(string id)
+        public async Task<IActionResult> Delete(string id)
         {
-            var person = _persons.FirstOrDefault(p => p.Id == id);
-
-            if(person is null)
-            {
-                return NotFound(new {Message = "Registro no encontrado."});
-            }
-
-            _persons.Remove(person);
-
-            Console.WriteLine($"Persona borrada:  {person.DNI} - {person.FirstName} {person.LastName}");
-
-            return Ok(new {Message = "Registro borrado correctamente."});
+            var result = await _personService.DeleteAsync(id);
+            return StatusCode(result.StatusCode, result);
         }
     }
 }
