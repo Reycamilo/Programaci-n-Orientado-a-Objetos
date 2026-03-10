@@ -1,8 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using PersonsApp.Dtos.Persons;
 using PersonsApp.Entities;
-
-
-// using PersonsApp.Entities;
 using PersonsApp.Services.Persons;
 
 namespace PersonsApp.Controllers
@@ -17,6 +15,16 @@ namespace PersonsApp.Controllers
         public PersonController(IPersonService personService)
         {
             _personService = personService;
+
+            //_persons = new List<PersonEntity>();
+            // _persons.Add(new PersonEntity
+            // {
+            //     DNI = "0401200012345",
+            //     FirstName = "Juan Carlos",
+            //     LastName = "Perez Hernandez",
+            //     Gender = "M",
+            //     BirthDate = DateTime.Parse("01/06/2000")
+            // });
             
             _persons = new List<PersonEntity>
             {
@@ -48,10 +56,9 @@ namespace PersonsApp.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetAll()
+        public IActionResult GetAll()
         {
-            var result = await _personService.GetAllAsync();
-            return Ok(result);
+            return Ok(_persons);
         }
 
         [HttpGet("{id}")]
@@ -62,43 +69,23 @@ namespace PersonsApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(PersonEntity person)
+        public async Task<ActionResult> Create(PersonCreateDto dto)
         {
-            var personExist = _persons.Any(p => p.DNI == person.DNI);
-
-            if(!personExist)
-            {
-                _persons.Add(person);
-                return Created();
-            }
-
-            return BadRequest(new {Message = "El DNI ya esta registrado."});
-
+            var result = await _personService.CreateAsync(dto);
+            return StatusCode(result.StatusCode, result);
         }
 
-
-        [HttpPut("{dni}")]
-        public IActionResult Update(string dni, PersonEntity person)
+        [HttpPut("{id}")]
+        public async Task<ActionResult> Update(string id, PersonEditDto dto)
         {
-            var oldPerson = _persons.FirstOrDefault(p => p.DNI == dni);
-
-            if(oldPerson is null)
-            {
-                return NotFound(new {Message = "Registro no encontrado."});
-            }
-
-            _persons.Remove(oldPerson);
-            _persons.Add(person);
-
-            Console.WriteLine($"Persona actualizada:  {person.DNI} - {person.FirstName} {person.LastName}");
-
-            return Ok(new {Message = "Registro editado correctamente."});
+            var result = await _personService.EditAsync(id, dto);
+            return StatusCode(result.StatusCode, result);
         }
 
-        [HttpDelete("{dni}")]
-        public IActionResult Delete(string dni)
+        [HttpDelete("{id}")]
+        public IActionResult Delete(string id)
         {
-            var person = _persons.FirstOrDefault(p => p.DNI == dni);
+            var person = _persons.FirstOrDefault(p => p.Id == id);
 
             if(person is null)
             {
@@ -110,14 +97,6 @@ namespace PersonsApp.Controllers
             Console.WriteLine($"Persona borrada:  {person.DNI} - {person.FirstName} {person.LastName}");
 
             return Ok(new {Message = "Registro borrado correctamente."});
-        }
-
-
-        [HttpGet("search")]
-        public async Task<ActionResult> GetByFirstName(string firstName)
-        {
-            var result = await _personService.GetOneByFirstNameAsync(firstName);
-            return Ok(result);
         }
     }
 }

@@ -2,6 +2,6 @@ namespace PersonsApp.Dtos.Persons
 {
     public class PersonActionResponseDto
     {
-        public Guid Id { get; set; }
+        public string Id { get; set; }
     }
 }

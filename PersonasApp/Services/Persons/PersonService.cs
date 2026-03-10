@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
+using PersonsApp.Mappers;
 using PersonsApp.Constants;
 using PersonsApp.Database;
 using PersonsApp.Dtos.Common;
 using PersonsApp.Dtos.Persons;
+using PersonsApp.Entities;
 
 namespace PersonsApp.Services.Persons
 {
@@ -96,5 +98,89 @@ namespace PersonsApp.Services.Persons
                 Data = personDto
             };
         }
+
+        public async Task<ResponseDto<PersonActionResponseDto>> CreateAsync(PersonCreateDto dto)
+        {
+            PersonEntity personEntity = PersonMapper.CreateDtoToEntity(dto);
+
+            _context.Persons.Add(personEntity);
+
+            await _context.SaveChangesAsync(); // Guardamos los cambios en la base de datos.
+
+               return new ResponseDto<PersonActionResponseDto>
+            {
+                StatusCode = HttpStatusCode.OK,
+                Message = HttpMessageResponse.REGISTER_CREATED,
+                Status = true,
+                Data = new PersonActionResponseDto
+                {
+                    Id = personEntity.Id
+                }
+            }; 
+        }
+    
+        public async Task<ResponseDto<PersonActionResponseDto>> EditAsync(string id, PersonEditDto dot) {
+            var personEntity = await _context.Persons.FirstOrDefaultAsync(p => p.Id == id);
+
+            if (personEntity is null)
+            {
+                return new ResponseDto<PersonActionResponseDto>
+                {
+                  StatusCode = HttpStatusCode.NOT_FOUND,
+                  Message = HttpMessageResponse.REGISTER_NOT_FOUND,
+                  Status = false,  
+                };
+            }
+
+            var personEntityUpdated = PersonMapper.EditDtoToEntity(dot, personEntity);
+
+            _context.Persons.Update(personEntityUpdated);
+
+            await _context.SaveChangesAsync();
+
+            return new ResponseDto<PersonActionResponseDto>
+            {
+                StatusCode = HttpStatusCode.OK,
+                Status = true,
+                Message = HttpMessageResponse.REGISTER_UPDATED,
+                Data = new PersonActionResponseDto
+                {
+                    Id = id
+                }
+            };
+        }
+
+        public async Task<ResponseDto<PersonActionResponseDto>> DeleteAsync(string id)
+        {
+            var personEntity = await _context.Persons.FirstOrDefaultAsync(p => p.Id == id);
+
+             if (personEntity is null)
+            {
+                return new ResponseDto<PersonActionResponseDto>
+                {
+                  StatusCode = HttpStatusCode.NOT_FOUND,
+                  Message = HttpMessageResponse.REGISTER_NOT_FOUND,
+                  Status = false,  
+                };
+            }
+
+            _context.Persons.Remove(personEntity);
+            await _context.SaveChangesAsync();
+
+
+            return new ResponseDto<PersonActionResponseDto>
+            {
+                StatusCode = HttpStatusCode.OK,
+                Status = true,
+                Message = HttpMessageResponse.REGISTER_DELETED,
+                Data = new PersonActionResponseDto
+                {
+                    Id = id
+                }
+                   
+            };
+        }
     }
+
+
 }

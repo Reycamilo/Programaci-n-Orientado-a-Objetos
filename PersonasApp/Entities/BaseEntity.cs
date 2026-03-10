@@ -7,7 +7,7 @@ namespace PersonsApp.Entities
     {
         [Key]
         [Column("id")]
-        public String Id { get; set; }
+        public string Id { get; set; }
 
         // Audit fields
         [Column("created_by_id")]

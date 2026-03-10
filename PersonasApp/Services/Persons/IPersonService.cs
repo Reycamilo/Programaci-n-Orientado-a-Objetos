@@ -11,5 +11,10 @@ namespace PersonsApp.Services.Persons
         Task<ResponseDto<List<PersonDto>>> GetAllAsync();
 
         Task<ResponseDto<List<PersonDto>>> GetOneByFirstNameAsync(string firstName);
+
+        Task<ResponseDto<PersonActionResponseDto>> CreateAsync(PersonCreateDto dto);
+
+        Task<ResponseDto<PersonActionResponseDto>> EditAsync(string id, PersonEditDto dot);
+
     }
 }
