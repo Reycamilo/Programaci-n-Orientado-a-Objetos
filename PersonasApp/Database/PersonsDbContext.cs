@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using PersonasApp.Entities;
 using PersonsApp.Entities;
 
 namespace PersonsApp.Database
@@ -11,5 +12,6 @@ namespace PersonsApp.Database
         }
 
         public DbSet<PersonEntity> Persons { get; set; }
+        public DbSet<CountryEntity> Countries { get; set; }
     }
 }

@@ -2,17 +2,20 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PersonsApp.Database;
 
 #nullable disable
 
-namespace PersonasApp.Migrations
+namespace PersonsApp.Migrations
 {
     [DbContext(typeof(PersonsDbContext))]
-    partial class PersonsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260314013926_AgregandolaTablaDeCountries")]
+    partial class AgregandolaTablaDeCountries
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.3");
@@ -108,23 +111,7 @@ namespace PersonasApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ConutryId");
-
                     b.ToTable("persons");
-                });
-
-            modelBuilder.Entity("PersonsApp.Entities.PersonEntity", b =>
-                {
-                    b.HasOne("PersonasApp.Entities.CountryEntity", "Country")
-                        .WithMany("Persons")
-                        .HasForeignKey("ConutryId");
-
-                    b.Navigation("Country");
-                });
-
-            modelBuilder.Entity("PersonasApp.Entities.CountryEntity", b =>
-                {
-                    b.Navigation("Persons");
                 });
 #pragma warning restore 612, 618
         }

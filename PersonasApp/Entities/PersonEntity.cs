@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using PersonasApp.Entities;
 
 namespace PersonsApp.Entities
 {
@@ -24,8 +25,17 @@ namespace PersonsApp.Entities
         [Column("birth_date")]
         public DateTime BirthDate { get; set; }
 
+
         [Column("gender")]
         public string Gender { get; set; }
+
+
+        [Column("country_id")]
+        public string CountryId { get; set; }
+
+
+        [ForeignKey(nameof(CountryId))]
+        public virtual CountryEntity Country { get; set; }
 
     }
 }

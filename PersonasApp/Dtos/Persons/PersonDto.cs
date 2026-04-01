@@ -1,3 +1,5 @@
+using PersonasApp.Dtos.Countries;
+
 namespace PersonsApp.Dtos.Persons
 {
     public class PersonDto
@@ -8,6 +10,7 @@ namespace PersonsApp.Dtos.Persons
         public string LastName { get; set; }
         public DateTime BirthDate { get; set; }
         public string Gender { get; set; }
+        public CountryOneDto Country  { get; set; }
 
     }
 }

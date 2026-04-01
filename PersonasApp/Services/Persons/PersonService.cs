@@ -13,25 +13,83 @@ namespace PersonsApp.Services.Persons
     {
         private readonly PersonsDbContext _context;
 
-        public PersonsService(PersonsDbContext context)
+        private readonly int PAGE_SIZE;
+        private readonly int PAGE_SIZE_LIMIT;
+
+
+        // ******************************* CONSTRUCTOR **********************************
+        public PersonsService(PersonsDbContext context, IConfiguration configuration)
         {
             _context = context;
+
+            PAGE_SIZE = configuration.GetValue<int>("PageSize");
+            PAGE_SIZE_LIMIT = configuration.GetValue<int>("PageSizeLimit");
         }
 
-        public async Task<ResponseDto<PersonDto>> GetOneByIdAsync(String id)
+//  ******************************************* METODOS ****************************************************************
+        
+        // METODO DE PAGINACION
+        public async Task<ResponseDto<PageDto<List<PersonDto>>>> GetPageAsync(string serachTerm = "", int page = 1, int pageSize = 10){
+            
+            page = Math.Abs(page);
+            pageSize = Math.Abs(pageSize);
+            pageSize = pageSize <= 0 ? PAGE_SIZE : pageSize;
+            pageSize = pageSize > PAGE_SIZE_LIMIT ? PAGE_SIZE_LIMIT : pageSize;
+
+            IQueryable<PersonEntity> personsQuery = _context.Persons;
+
+            int startIndex = (page - 1) * pageSize;
+
+            if (!string.IsNullOrEmpty(serachTerm))
+            {
+                personsQuery = personsQuery.Where( x => (x.DNI + " " + x.FirstName + " " + x.LastName).Contains(serachTerm));
+            }
+
+            int totalRows = await personsQuery.CountAsync();
+
+            var personsEntity = await personsQuery
+            .OrderBy(x => x.FirstName)
+            .Skip(startIndex)
+            .Take(pageSize)
+            .ToListAsync();
+
+            var personsDto = PersonMapper.ListEntitytoListDto(personsEntity);
+
+
+            return new ResponseDto<PageDto<List<PersonDto>>>
+            {
+                StatusCode = HttpStatusCode.OK,
+                Message = HttpMessageResponse.REGISTERS_FOUND,
+                Status = true,
+                Data = new PageDto<List<PersonDto>>
+                {
+                    CurrentPage = page == 0 ? 1 : page,
+                    PageSize = pageSize,
+                    TotalItems = totalRows,
+                    TotalPages = (int)Math.Ceiling((double)totalRows/pageSize),
+                    Items = PersonMapper.ListEntitytoListDto(personsEntity),
+                    HasNextPage = startIndex + pageSize < PAGE_SIZE_LIMIT && 
+                    page < (int)Math.Ceiling((double)totalRows/pageSize),
+                    HasPreviousPage = page > 1 
+                }
+            };
+        }
+        
+        
+        // METODO PARA BUSCAR POR ID
+        public async Task<ResponseDto<PersonDto>> GetOneByIdAsync(string id)
         {
             var personEntity = await _context.Persons.FirstOrDefaultAsync(p => p.Id == id);
 
-            if(personEntity is null)
+            if ( personEntity is null)
             {
                 return new ResponseDto<PersonDto>
                 {
                     StatusCode = HttpStatusCode.NOT_FOUND,
                     Message = HttpMessageResponse.REGISTER_NOT_FOUND,
-                    Status = false,                    
+                    Status = false,
                 };
             }
-
             return new ResponseDto<PersonDto>
             {
                 StatusCode = HttpStatusCode.OK,
@@ -44,61 +102,13 @@ namespace PersonsApp.Services.Persons
                     FirstName = personEntity.FirstName,
                     LastName = personEntity.LastName,
                     BirthDate = personEntity.BirthDate,
-                    Gender = personEntity.Gender
+                    Gender = personEntity.Gender   
                 }
             };
-
         }
+    
 
-        // haciendo pruebas
-        public async Task<ResponseDto<List<PersonDto>>> GetAllAsync()
-        {
-            // 1. Traemos todas las personas de la base de datos.
-            var personEntities = await _context.Persons.ToListAsync();
-
-            // 2. Convertimos la lista de entidades a una lista de DTOs.
-            var personDto = personEntities.Select(p => new PersonDto
-            {
-                Id = p.Id,
-                DNI = p.DNI,
-                FirstName = p.FirstName,
-                LastName = p.LastName,
-                BirthDate = p.BirthDate,    
-            }).ToList();
-
-            // 3. Devolvemos la caja con la lista de personas
-            return new ResponseDto<List<PersonDto>>
-            {
-                StatusCode = HttpStatusCode.OK,
-                Message = HttpMessageResponse.REGISTER_FOUND,
-                Status = true,
-                Data = personDto
-            };
-        }
-        
-        public async Task<ResponseDto<List<PersonDto>>> GetOneByFirstNameAsync (string firstName)
-        {
-            var personEntities = await _context.Persons.Where(p => p.FirstName == firstName).ToListAsync();
-
-           var personDto = personEntities.Select(p => new PersonDto
-            {
-                Id = p.Id,
-                DNI = p.DNI,
-                FirstName = p.FirstName,
-                LastName = p.LastName,
-                BirthDate = p.BirthDate,    
-                Gender = p.Gender
-            }).ToList();
-
-            return new ResponseDto<List<PersonDto>>
-            {
-                StatusCode = HttpStatusCode.OK,
-                Message = HttpMessageResponse.REGISTER_FOUND,
-                Status = true,
-                Data = personDto
-            };
-        }
-
+        // METODO PARA CREAR PERSONA
         public async Task<ResponseDto<PersonActionResponseDto>> CreateAsync(PersonCreateDto dto)
         {
             PersonEntity personEntity = PersonMapper.CreateDtoToEntity(dto);
@@ -119,6 +129,8 @@ namespace PersonsApp.Services.Persons
             }; 
         }
     
+
+        // METODO PARA EDITAR 
         public async Task<ResponseDto<PersonActionResponseDto>> EditAsync(string id, PersonEditDto dot) {
             var personEntity = await _context.Persons.FirstOrDefaultAsync(p => p.Id == id);
 
@@ -150,7 +162,10 @@ namespace PersonsApp.Services.Persons
             };
         }
 
+
+        // MEOTODO PARA ELIMINAR
         public async Task<ResponseDto<PersonActionResponseDto>> DeleteAsync(string id)
+
         {
             var personEntity = await _context.Persons.FirstOrDefaultAsync(p => p.Id == id);
 
@@ -160,7 +175,11 @@ namespace PersonsApp.Services.Persons
                 {
                   StatusCode = HttpStatusCode.NOT_FOUND,
                   Message = HttpMessageResponse.REGISTER_NOT_FOUND,
-                  Status = false,  
+                  Status = false,
+                  Data = new PersonActionResponseDto
+                  {
+                      Id = id
+                  }
                 };
             }
 
@@ -180,7 +199,7 @@ namespace PersonsApp.Services.Persons
                    
             };
         }
+        }
     }
 
 
-}

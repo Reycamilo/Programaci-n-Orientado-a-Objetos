@@ -2,57 +2,23 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PersonsApp.Database;
 
 #nullable disable
 
-namespace PersonasApp.Migrations
+namespace PersonsApp.Migrations
 {
     [DbContext(typeof(PersonsDbContext))]
-    partial class PersonsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260312222306_Update")]
+    partial class Update
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.3");
-
-            modelBuilder.Entity("PersonasApp.Entities.CountryEntity", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("id");
-
-                    b.Property<string>("AlphaCode3")
-                        .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasColumnName("alpha_code_3");
-
-                    b.Property<string>("CreatedById")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("created_by_id");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("created_date");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasColumnName("name");
-
-                    b.Property<string>("UpdateById")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("update_by_id");
-
-                    b.Property<DateTime>("UpdateDate")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("update_date");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("countries");
-                });
 
             modelBuilder.Entity("PersonsApp.Entities.PersonEntity", b =>
                 {
@@ -63,10 +29,6 @@ namespace PersonasApp.Migrations
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("TEXT")
                         .HasColumnName("birth_date");
-
-                    b.Property<string>("ConutryId")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("country_id");
 
                     b.Property<string>("CreatedById")
                         .HasColumnType("TEXT")
@@ -108,23 +70,7 @@ namespace PersonasApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ConutryId");
-
                     b.ToTable("persons");
-                });
-
-            modelBuilder.Entity("PersonsApp.Entities.PersonEntity", b =>
-                {
-                    b.HasOne("PersonasApp.Entities.CountryEntity", "Country")
-                        .WithMany("Persons")
-                        .HasForeignKey("ConutryId");
-
-                    b.Navigation("Country");
-                });
-
-            modelBuilder.Entity("PersonasApp.Entities.CountryEntity", b =>
-                {
-                    b.Navigation("Persons");
                 });
 #pragma warning restore 612, 618
         }
