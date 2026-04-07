@@ -1,11 +1,13 @@
 
 
+using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Identity;
 
 namespace PersonasApp.Entities
 {
     public class RoleEntity : IdentityRole
     {
-        public int MyProperty { get; set; }
+        [Column("description")]
+        public string Description { get; set; }
     }
 }
