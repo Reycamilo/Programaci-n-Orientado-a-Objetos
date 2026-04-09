@@ -103,7 +103,9 @@ obj/Debug/net10.0/
  PersonasApp.AssemblyInfo.cs
  PersonasApp.GlobalUsings.g.cs
 Program.cs
-Pruebas/Prueba.cs
+Pruebas/
+ Prueba.cs
+ prueba2.cs
 Services/Persons/
  IPersonService.cs
  PersonService.cs
